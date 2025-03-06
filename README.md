@@ -1,5 +1,4 @@
-# php-refactoring
-PHP Refactoring Code Challenge
+# PHP Refactoring Code Challenge
 
 The objective here to refactor the code in a way that makes it more easily maintainable and efficient.
 Organise it in a way that makes sense to you.
