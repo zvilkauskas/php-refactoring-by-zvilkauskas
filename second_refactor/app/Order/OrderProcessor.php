@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Order;
 
 use App\Discount\DiscountStrategy;
+use App\Discount\RegularDiscount;
+use App\Discount\VipDiscountDecorator;
 use App\Service\EmailService;
 
-class OrderProcessor
+readonly class OrderProcessor
 {
+    private DiscountStrategy $discountStrategy;
+
     public function __construct(
-        private TotalCalculator $calculator,
-        private DiscountStrategy $discountStrategy,
-        private EmailService $emailService,
+        private TotalCalculator  $calculator,
+        private EmailService     $emailService,
     ) {}
 
     public function processOrders(array $orders): void
@@ -22,8 +25,15 @@ class OrderProcessor
                 continue;
             }
 
+            $baseDiscount = new RegularDiscount();
+            $discountStrategy = $order['customer_type'] === 'vip'
+                ? new VipDiscountDecorator($baseDiscount)
+                : $baseDiscount;
+
             $total = $this->calculator->calculate($order['items']);
-            $finalTotal = $this->discountStrategy->calculate($total);
+            $discount = $discountStrategy->calculate($total);
+            $finalTotal = $total - $discount;
+
 
             $this->emailService->send(
                 $order['customer_email'],

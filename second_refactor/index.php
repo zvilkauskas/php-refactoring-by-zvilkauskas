@@ -19,16 +19,28 @@ $orders = [
             ['price' => 50, 'quantity' => 2],
             ['price' => 30, 'quantity' => 1]
         ]
-    ]
+    ],
+    [
+        'status' => 'completed',
+        'customer_email' => 'customer2@example.com',
+        'customer_type' => 'regular',
+        'items' => [
+            ['price' => 20, 'quantity' => 3]
+        ]
+    ],
+    [
+        'status' => 'pending',
+        'customer_email' => 'customer3@example.com',
+        'customer_type' => 'regular',
+        'items' => [
+            ['price' => 48, 'quantity' => 2],
+            ['price' => 2, 'quantity' => 1]
+        ]
+    ],
 ];
-
-$isVip = $orders[0]['customer_type'] === 'vip';
-$baseDiscount = new RegularDiscount();
-$discount = $isVip ? new VipDiscountDecorator($baseDiscount) : $baseDiscount;
 
 $processor = new OrderProcessor(
     new TotalCalculator(),
-    $discount,
     new EmailService()
 );
 

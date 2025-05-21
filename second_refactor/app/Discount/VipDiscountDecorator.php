@@ -6,12 +6,14 @@ namespace App\Discount;
 
 class VipDiscountDecorator implements DiscountStrategy
 {
-    public function  __construct(private DiscountStrategy $baseStrategy) {}
+    public function __construct(private DiscountStrategy $baseStrategy) {}
 
     public function calculate(float $total): float
     {
-        $discount = $this->baseStrategy->calculate($total);
+        $baseDiscount = $this->baseStrategy->calculate($total);
+        $afterBaseDiscount = $total - $baseDiscount;
+        $vipDiscount = $afterBaseDiscount * 0.1;
 
-        return ($total - $discount) * 0.9;
+        return $baseDiscount + $vipDiscount;
     }
 }
