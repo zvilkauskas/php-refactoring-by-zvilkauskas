@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Discount;
 
-class VipDiscountDecorator implements DiscountStrategy
+readonly class VipDiscountDecorator implements DiscountStrategy
 {
     public function __construct(private DiscountStrategy $baseStrategy) {}
 
