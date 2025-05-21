@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Order;
 
-use App\Discount\DiscountStrategy;
 use App\Discount\RegularDiscount;
 use App\Discount\VipDiscountDecorator;
 use App\Service\EmailService;
 
 readonly class OrderProcessor
 {
-    private DiscountStrategy $discountStrategy;
-
     public function __construct(
         private TotalCalculator  $calculator,
         private EmailService     $emailService,
@@ -33,7 +30,6 @@ readonly class OrderProcessor
             $total = $this->calculator->calculate($order['items']);
             $discount = $discountStrategy->calculate($total);
             $finalTotal = $total - $discount;
-
 
             $this->emailService->send(
                 $order['customer_email'],
